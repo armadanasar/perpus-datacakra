@@ -46,8 +46,6 @@ exports.getOneById = async (lendingId) => {
 
 exports.getOneByQuery = async (query) => {
   try {
-    console.log("hasil", query);
-
     const bookLending = await BookLending.findOne(query).deepPopulate([
       "lender_user",
       "book",

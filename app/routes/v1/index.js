@@ -10,7 +10,6 @@ module.exports = ({ Router }) => {
 
     if (file.indexOf(".js") > 0 && basename !== "index") {
       const loadFile = require(`./${basename}`)({ Router });
-      console.log("basename", basename);
       router.use(`/${basename}`, loadFile);
     }
   });

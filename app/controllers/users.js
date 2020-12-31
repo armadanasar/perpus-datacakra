@@ -1,27 +1,16 @@
 const Joi = require("joi");
 const { createUser, getOneById, login } = require("../data_access/users");
 
-const validateBody = async (body) => {
-  try {
-    const schema = Joi.object().keys({
-      full_name: Joi.string().optional(),
-      role: Joi.string().optional().valid("public", "admin"),
-      password: Joi.string().required(),
-      email: Joi.string().email().required(),
-    });
-    const { value, error } = await schema.validate(body);
-
-    if (error) throw error;
-
-    return value;
-  } catch (err) {
-    throw err;
-  }
-};
+const userBodySchema = Joi.object().keys({
+  full_name: Joi.string().optional(),
+  role: Joi.string().optional().valid("public", "admin"),
+  password: Joi.string().required(),
+  email: Joi.string().email().required(),
+});
 
 exports.registerUser = async (req, res, next) => {
   try {
-    const body = await validateBody(req.body);
+    const body = await validateBySchema(req.body, userBodySchema);
 
     const newUser = await createUser(body);
 
@@ -33,9 +22,7 @@ exports.registerUser = async (req, res, next) => {
 
 exports.loginUser = async (req, res, next) => {
   try {
-    console.log(req.body);
-    const body = await validateBody(req.body);
-    console.log("bodi login", body);
+    const body = await validateBySchema(req.body, userBodySchema);
     const token = await login(body);
 
     return res.json(token);

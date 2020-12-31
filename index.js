@@ -77,7 +77,7 @@ module.exports = function main(options, cb) {
       ],
     });
   });
-  console.log(opts);
+
   // Start server
   server = app.listen(opts.port, opts.host, function (err) {
     if (err) {

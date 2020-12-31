@@ -10,7 +10,7 @@ const { jwtSign } = require("../libs/jwt");
 exports.createUser = async (createUserInput) => {
   try {
     const newUser = await new User(createUserInput).save();
-    console.log(createUserInput.roles);
+
     const { _id, email, role } = newUser;
     const token = jwtSign(newUser);
 
