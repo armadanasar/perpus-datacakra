@@ -17,9 +17,10 @@ exports.getAll = async (params) => {
 
     const [lendings, total] = await Promise.all([
       BookLending.find(query)
-        .sort({ updated_at: "desc" })
+        .sort({ created_at: "desc" })
         .limit(Number(limit))
-        .skip(Number(limit) * Number(skip)),
+        .skip(Number(limit) * Number(skip))
+        .deepPopulate(["lender_user", "book"]),
       BookLending.count(query),
     ]);
 
@@ -33,7 +34,7 @@ exports.getOneById = async (lendingId) => {
   try {
     const bookLending = await BookLending.findOne({
       _id: ObjectId.createFromHexString(lendingId),
-    });
+    }).deepPopulate(["lender_user", "book"]);
 
     if (!bookLending) throw new Error("no such lending");
 
@@ -47,7 +48,10 @@ exports.getOneByQuery = async (query) => {
   try {
     console.log("hasil", query);
 
-    const bookLending = await BookLending.findOne(query);
+    const bookLending = await BookLending.findOne(query).deepPopulate([
+      "lender_user",
+      "book",
+    ]);
 
     if (!bookLending) throw new Error("no such lending");
 
@@ -72,6 +76,25 @@ exports.getLendingStatus = async (query) => {
           },
         },
       },
+      {
+        $lookup: {
+          from: "books",
+          as: "book",
+          localField: "book",
+          foreignField: "_id",
+        },
+      },
+      { $unwind: "$book" },
+      {
+        $lookup: {
+          from: "users",
+          as: "lender_user",
+          localField: "lender_user",
+          foreignField: "_id",
+        },
+      },
+      { $unwind: "$lender_user" },
+      { $unset: ["lender_user.password"] },
     ]);
 
     if (!bookLending) throw new Error("no such lending");
@@ -119,7 +142,9 @@ exports.createLending = async (bookLendingInput) => {
 
     if (!newBookLending) throw new Error("cannot save book lending");
 
-    return newBookLending;
+    const lending = await exports.getOneById(newBookLending._id.toString());
+
+    return lending;
   } catch (err) {
     throw err;
   }

@@ -5,7 +5,7 @@ const { ObjectId } = Schema.Types;
 const $NAME = "BookLending";
 const $SCHEMA = new Schema(
   {
-    book_id: { type: ObjectId, ref: "Book" },
+    book: { type: ObjectId, ref: "Book" },
     lender_user: { type: ObjectId, ref: "User" },
     lending_date: { type: Date, default: Date.now, required: true },
     expected_return_date: { type: Date, required: true },

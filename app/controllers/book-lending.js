@@ -19,7 +19,7 @@ const bookLendingParamsSchema = Joi.object().keys({
 });
 
 const bookLendingBodySchema = Joi.object().keys({
-  bookId: Joi.objectId().required(),
+  book: Joi.objectId().required(),
   expected_return_date: Joi.date().min("now").required(),
 });
 
@@ -59,13 +59,13 @@ exports.lendBook = async (req, res, next) => {
     const user = await verifyUser(req.user._id);
     if (user) throw new Error("admins cannot lend books!");
 
-    const { bookId, expected_return_date } = await validateBySchema(
+    const { book, expected_return_date } = await validateBySchema(
       req.body,
       bookLendingBodySchema
     );
 
     const newLendingData = {
-      book_id: ObjectId.createFromHexString(bookId),
+      book: ObjectId.createFromHexString(book),
       lender_user: ObjectId.createFromHexString(req.user._id),
       expected_return_date: expected_return_date,
     };

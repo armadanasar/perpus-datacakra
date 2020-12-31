@@ -69,4 +69,11 @@ $SCHEMA.methods.comparePassword = function comparePassword(insertedPassword) {
   });
 };
 
+$SCHEMA.set("toJSON", {
+  transform: function (doc, ret, opt) {
+    delete ret["password"];
+    return ret;
+  },
+});
+
 module.exports = require("mongoose").model($NAME, $SCHEMA);
