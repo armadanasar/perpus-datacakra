@@ -52,14 +52,6 @@ module.exports = function main(options, cb) {
   // app.use(/* ... */)
   app.use(pinoHttp({ logger }));
 
-  // Register routes
-  // @NOTE: require here because this ensures that even syntax errors
-  // or other startup related errors are caught logged and debuggable.
-  // Alternativly, you could setup external log handling for startup
-  // errors and handle them outside the node process.  I find this is
-  // better because it works out of the box even in local development.
-  require("./routes")(app, opts);
-
   // Common error handlers
   app.use(function fourOhFourHandler(req, res, next) {
     next(httpErrors(404, `Route not found: ${req.url}`));
