@@ -5,9 +5,11 @@ if (!JWT_SECRET) {
   throw new Error("Need to set JWT Secret!");
 }
 
-const jwtSign = ({ _id }) => {
+const jwtSign = ({ _id, email, role }) => {
   try {
-    const token = jwt.sign({ _id }, JWT_SECRET, { expiresIn: "365d" });
+    const token = jwt.sign({ _id, email, role }, JWT_SECRET, {
+      expiresIn: "365d",
+    });
 
     return token;
   } catch (err) {

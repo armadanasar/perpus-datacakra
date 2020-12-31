@@ -1,4 +1,6 @@
 "use strict";
+require("dotenv").config();
+
 const express = require("express");
 const httpErrors = require("http-errors");
 const pino = require("pino");
@@ -86,6 +88,8 @@ module.exports = function main(options, cb) {
     if (serverClosing) {
       return ready(new Error("Server was closed before it could start"));
     }
+
+    require("./app/models");
 
     serverStarted = true;
     const addr = server.address();
