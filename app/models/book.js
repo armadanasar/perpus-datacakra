@@ -7,11 +7,11 @@ const $SCHEMA = new Schema(
   {
     isbn: { type: String, required: true, unique: true },
     title: { type: String, sparse: true, required: true },
-    writer: String,
+    author: String,
     publisher: String,
     pages: Number,
     description: String,
-    inserting_user: { type: ObjectId, ref: "User" },
+    user: { type: ObjectId, ref: "User" },
   },
   {
     timestamps: {

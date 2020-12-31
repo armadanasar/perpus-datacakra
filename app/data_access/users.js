@@ -1,9 +1,5 @@
 const {
-  models: {
-    user: User,
-    property_domain: PropertyDomain,
-    property_profile: PropertyProfile,
-  },
+  models: { user: User },
   mongoose: {
     Types: { ObjectId },
   },
@@ -49,6 +45,16 @@ exports.getOneById = async (userId) => {
     const user = await User.findOne({ _id: userId });
 
     if (!user) throw new Error("no such user");
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.getOne = async ({ query }) => {
+  try {
+    const user = await User.findOne(query).lean();
 
     return user;
   } catch (err) {
