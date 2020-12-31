@@ -114,18 +114,6 @@ exports.getAllBooks = async (req, res, next) => {
   }
 };
 
-// exports.getAllBooks = async (req, res, next) => {
-//   try {
-//     const params = await validateBySchema(req.params, getAllBooksParamsSchema);
-
-//     const queryResult = await getAll(params);
-
-//     return res.json(queryResult);
-//   } catch (err) {
-//     return next(err);
-//   }
-// };
-
 exports.getBookById = async (req, res, next) => {
   try {
     const params = await validateBySchema(req.params, bookParamsSchema);
