@@ -33,7 +33,7 @@ exports.getAll = async (params) => {
   }
 };
 
-exports.getOneById = async ({ bookId }) => {
+exports.getOneById = async (bookId) => {
   try {
     const book = await Book.findOne({
       _id: ObjectId.createFromHexString(bookId),

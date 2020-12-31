@@ -1,8 +1,5 @@
 const {
   models: { user: User },
-  mongoose: {
-    Types: { ObjectId },
-  },
 } = require("../models");
 
 const { jwtSign } = require("../libs/jwt");
@@ -52,7 +49,7 @@ exports.getOneById = async (userId) => {
   }
 };
 
-exports.getOne = async ({ query }) => {
+exports.getOne = async (query) => {
   try {
     const user = await User.findOne(query).lean();
 
@@ -60,4 +57,15 @@ exports.getOne = async ({ query }) => {
   } catch (err) {
     throw err;
   }
+};
+
+exports.verifyUser = async (userId) => {
+  const user = await module.exports.getOne({
+    query: {
+      _id: userId,
+      role: "admin",
+    },
+  });
+
+  return user;
 };

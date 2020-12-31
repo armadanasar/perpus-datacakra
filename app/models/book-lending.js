@@ -9,6 +9,8 @@ const $SCHEMA = new Schema(
     lender_user: { type: ObjectId, ref: "User" },
     lending_date: { type: Date, default: Date.now, required: true },
     expected_return_date: { type: Date, required: true },
+    returned: { type: Boolean, required: true, default: false },
+    returned_at: { type: Date },
   },
   {
     timestamps: {

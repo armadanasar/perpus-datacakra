@@ -44,20 +44,9 @@ const getAllBooksParamsSchema = Joi.object().keys({
   q: Joi.string().trim().allow(""),
 });
 
-const verifyUser = async (userId) => {
-  const user = await UserDAOS.getOne({
-    query: {
-      _id: userId,
-      role: "admin",
-    },
-  });
-
-  return user;
-};
-
 exports.createBook = async (req, res, next) => {
   try {
-    const user = await verifyUser(req.user._id);
+    const user = await UserDAOS.verifyUser(req.user._id);
     if (!user) throw new Error("you need to be admin to do this!");
 
     const body = await validateBySchema(req.body, createBookBodySchema);
@@ -73,7 +62,7 @@ exports.createBook = async (req, res, next) => {
 
 exports.updateBook = async (req, res, next) => {
   try {
-    const user = await verifyUser(req.user._id);
+    const user = await UserDAOS.verifyUser(req.user._id);
     if (!user) throw new Error("you need to be admin to do this!");
 
     const { bookId } = await validateBySchema(req.params, bookParamsSchema);
@@ -89,7 +78,7 @@ exports.updateBook = async (req, res, next) => {
 
 exports.deleteBook = async (req, res, next) => {
   try {
-    const user = await verifyUser(req.user._id);
+    const user = await UserDAOS.verifyUser(req.user._id);
     if (!user) throw new Error("you need to be admin to do this!");
 
     const { bookId } = await validateBySchema(req.params, bookParamsSchema);
@@ -116,9 +105,9 @@ exports.getAllBooks = async (req, res, next) => {
 
 exports.getBookById = async (req, res, next) => {
   try {
-    const params = await validateBySchema(req.params, bookParamsSchema);
+    const { bookId } = await validateBySchema(req.params, bookParamsSchema);
 
-    const book = await getOneById(params);
+    const book = await getOneById(bookId);
 
     return res.json(book);
   } catch (err) {
