@@ -1,10 +1,9 @@
-const mongoose = require("mongoose");
 const {
   models: { "book-lending": BookLending },
+  mongoose: {
+    Types: { ObjectId },
+  },
 } = require("../models");
-const {
-  Types: { ObjectId },
-} = mongoose;
 
 exports.getAll = async (params) => {
   try {
@@ -85,12 +84,12 @@ exports.getLendingStatus = async (query) => {
 
 exports.returnLending = async (lendingId) => {
   try {
-    const lending = await module.exports.getOneById(lendingId);
+    const lending = await exports.getOneById(lendingId);
 
     if (lending.returned)
       throw new Error("cannot return lend already returned book");
 
-    const updatedLending = await module.exports.updateById(lendingId, {
+    const updatedLending = await exports.updateById(lendingId, {
       returned: true,
       returned_at: Date.now(),
     });

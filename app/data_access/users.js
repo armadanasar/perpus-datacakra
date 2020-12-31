@@ -1,5 +1,8 @@
 const {
   models: { user: User },
+  mongoose: {
+    Types: { ObjectId },
+  },
 } = require("../models");
 
 const { jwtSign } = require("../libs/jwt");
@@ -60,11 +63,9 @@ exports.getOne = async (query) => {
 };
 
 exports.verifyUser = async (userId) => {
-  const user = await module.exports.getOne({
-    query: {
-      _id: userId,
-      role: "admin",
-    },
+  const user = await exports.getOne({
+    _id: ObjectId.createFromHexString(userId),
+    role: "admin",
   });
 
   return user;

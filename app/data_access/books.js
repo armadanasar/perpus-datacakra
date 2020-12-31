@@ -1,10 +1,9 @@
-const mongoose = require("mongoose");
 const {
   models: { book: Book },
+  mongoose: {
+    Types: { ObjectId },
+  },
 } = require("../models");
-const {
-  Types: { ObjectId },
-} = mongoose;
 
 exports.getAll = async (params) => {
   try {
